@@ -1,20 +1,25 @@
 package com.reservation.controller;
 
 import com.reservation.model.Ticket;
+import com.reservation.model.Reservation;
 import com.reservation.service.TicketService;
+import com.reservation.service.ReservationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/tickets")
 public class TicketController {
 
     private final TicketService ticketService;
+    private final ReservationService reservationService;
 
-    public TicketController(TicketService ticketService) {
+    public TicketController(TicketService ticketService, ReservationService reservationService) {
         this.ticketService = ticketService;
+        this.reservationService = reservationService;
     }
 
     @GetMapping
@@ -22,21 +27,15 @@ public class TicketController {
         return ticketService.getAllTickets();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Ticket> getTicketById(@PathVariable Long id) {
-        return ticketService.getTicketById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
     @PostMapping
-    public Ticket createTicket(@RequestBody Ticket ticket) {
-        return ticketService.createTicket(ticket);
-    }
+    public Ticket createTicket(@RequestBody Map<String, Object> payload) {
+        Long reservationId = Long.valueOf((Integer) payload.get("reservationId"));
+        String ticketCode = (String) payload.get("ticketCode");
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTicket(@PathVariable Long id) {
-        ticketService.deleteTicket(id);
-        return ResponseEntity.noContent().build();
+        Reservation reservation = reservationService.getReservationById(reservationId)
+                .orElseThrow(() -> new RuntimeException("Reservation not found"));
+
+        Ticket ticket = new Ticket(reservation, ticketCode);
+        return ticketService.createTicket(ticket);
     }
 }
