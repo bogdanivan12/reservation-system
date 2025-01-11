@@ -1,6 +1,7 @@
 package com.reservation.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
@@ -11,15 +12,17 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message = "User is required")
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @NotNull(message = "Event is required")
     @ManyToOne
     @JoinColumn(name = "event_id", nullable = false)
     private Event event;
 
-    @NotNull(message = "Number of seats is required")
+    @Min(value = 1, message = "At least one seat must be reserved")
     private Integer numberOfSeats;
 
     private LocalDateTime reservationDate = LocalDateTime.now();

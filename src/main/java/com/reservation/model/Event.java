@@ -1,8 +1,10 @@
 package com.reservation.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import java.time.LocalDate;
 
 @Entity
@@ -15,20 +17,21 @@ public class Event {
     @NotBlank(message = "Event name is required")
     private String name;
 
+    @Future(message = "The event date must be in the future")
     @NotNull(message = "Event date is required")
     private LocalDate date;
 
+    @NotNull(message = "Location is required")
     @ManyToOne
     @JoinColumn(name = "location_id", nullable = false)
     private Location location;
 
-    @NotNull(message = "Capacity is required")
+    @Positive(message = "Capacity must be positive")
     private Integer capacity;
 
     private Integer availableSeats;
 
-    public Event() {
-    }
+    public Event() {}
 
     public Event(String name, LocalDate date, Location location, Integer capacity) {
         this.name = name;

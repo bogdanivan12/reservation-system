@@ -2,6 +2,7 @@ package com.reservation.controller;
 
 import com.reservation.model.Location;
 import com.reservation.service.LocationService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,12 +31,12 @@ public class LocationController {
     }
 
     @PostMapping
-    public Location createLocation(@RequestBody Location location) {
+    public Location createLocation(@Valid @RequestBody Location location) {
         return locationService.createLocation(location);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Location> updateLocation(@PathVariable Long id, @RequestBody Location locationDetails) {
+    public ResponseEntity<Location> updateLocation(@PathVariable Long id, @Valid @RequestBody Location locationDetails) {
         try {
             Location updatedLocation = locationService.updateLocation(id, locationDetails);
             return ResponseEntity.ok(updatedLocation);
