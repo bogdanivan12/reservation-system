@@ -2,6 +2,7 @@ package com.reservation.controller;
 
 import com.reservation.model.User;
 import com.reservation.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +31,7 @@ public class UserController {
     }
 
     @PostMapping
-    public User createUser(@RequestBody User user) {
+    public User createUser(@Valid @RequestBody User user) {
         return userService.createUser(user);
     }
 

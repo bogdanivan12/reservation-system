@@ -3,6 +3,8 @@ package com.reservation.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "app_user")
@@ -13,13 +15,14 @@ public class User {
     private Long id;
 
     @NotBlank(message = "Name is required")
+    @Size(min = 2, max = 50, message = "Name must be between 2 and 50 characters")
     private String name;
 
-    @Email(message = "Email must be valid")
+    @Email(message = "Invalid email format")
     @NotBlank(message = "Email is required")
     private String email;
 
-    @NotBlank(message = "Phone number is required")
+    @Pattern(regexp = "^\\d{10}$", message = "Phone number must be exactly 10 digits")
     private String phoneNumber;
 
     public User() {}

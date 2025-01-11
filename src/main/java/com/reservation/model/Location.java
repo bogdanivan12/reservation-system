@@ -2,7 +2,7 @@ package com.reservation.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 @Entity
 public class Location {
@@ -17,11 +17,10 @@ public class Location {
     @NotBlank(message = "Address is required")
     private String address;
 
-    @NotNull
+    @Positive(message = "Capacity must be a positive number")
     private Integer capacity;
 
-    public Location() {
-    }
+    public Location() {}
 
     public Location(String name, String address, Integer capacity) {
         this.name = name;
