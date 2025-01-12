@@ -33,27 +33,36 @@ public class ReservationController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Reservation> getReservationById(@PathVariable Long id) {
+    public ResponseEntity<?> getReservationById(@PathVariable Long id) {
         return reservationService.getReservationById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Reservation createReservation(@Valid @RequestBody ReservationRequest request) {
-        User user = userService.getUserById(request.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    public ResponseEntity<?> createReservation(@Valid @RequestBody ReservationRequest request) {
+        try {
+            User user = userService.getUserById(request.getUserId())
+                    .orElseThrow(() -> new RuntimeException("User not found"));
 
-        Event event = eventService.getEventById(request.getEventId())
-                .orElseThrow(() -> new RuntimeException("Event not found"));
+            Event event = eventService.getEventById(request.getEventId())
+                    .orElseThrow(() -> new RuntimeException("Event not found"));
 
-        Reservation reservation = new Reservation(user, event, request.getNumberOfSeats());
-        return reservationService.createReservation(reservation);
+            Reservation reservation = new Reservation(user, event, request.getNumberOfSeats());
+            return ResponseEntity.ok(reservationService.createReservation(reservation));
+
+        } catch (RuntimeException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteReservation(@PathVariable Long id) {
-        reservationService.deleteReservation(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> deleteReservation(@PathVariable Long id) {
+        try {
+            reservationService.deleteReservation(id);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
 }
