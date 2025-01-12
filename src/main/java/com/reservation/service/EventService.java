@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +28,10 @@ public class EventService {
     }
 
     public Event createEvent(Event event) {
+        if (event.getDate().isBefore(LocalDate.now())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Event date must be in the future");
+        }
+
         if (event.getCapacity() > event.getLocation().getCapacity()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Event capacity cannot exceed location capacity.");
         }

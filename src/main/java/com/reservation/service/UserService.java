@@ -2,6 +2,7 @@ package com.reservation.service;
 
 import com.reservation.model.User;
 import com.reservation.repository.UserRepository;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,6 +39,9 @@ public class UserService {
     }
 
     public void deleteUser(Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new RuntimeException("User not found");
+        }
         userRepository.deleteById(id);
     }
 }

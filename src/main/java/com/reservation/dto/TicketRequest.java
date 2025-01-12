@@ -5,6 +5,11 @@ import jakarta.validation.constraints.NotNull;
 
 public class TicketRequest {
 
+    public TicketRequest(Long reservationId, String ticketCode) {
+        this.reservationId = reservationId;
+        this.ticketCode = ticketCode;
+    }
+
     @NotNull(message = "Reservation ID is required")
     private Long reservationId;
 
