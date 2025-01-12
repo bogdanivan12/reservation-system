@@ -8,6 +8,13 @@ import java.time.LocalDate;
 
 public class EventRequest {
 
+    public EventRequest(String name, LocalDate date, Long locationId, Integer capacity) {
+        this.name = name;
+        this.date = date;
+        this.locationId = locationId;
+        this.capacity = capacity;
+    }
+
     @NotBlank(message = "Event name is required")
     private String name;
 

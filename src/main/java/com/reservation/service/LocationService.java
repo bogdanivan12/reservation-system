@@ -38,6 +38,9 @@ public class LocationService {
     }
 
     public void deleteLocation(Long id) {
+        if (!locationRepository.existsById(id)) {
+            throw new RuntimeException("Location not found");
+        }
         locationRepository.deleteById(id);
     }
 }

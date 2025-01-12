@@ -29,6 +29,9 @@ public class TicketService {
     }
 
     public void deleteTicket(Long id) {
+        if (!ticketRepository.existsById(id)) {
+            throw new RuntimeException("Ticket not found");
+        }
         ticketRepository.deleteById(id);
     }
 }

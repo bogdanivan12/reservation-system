@@ -43,6 +43,9 @@ public class ReservationService {
     }
 
     public void deleteReservation(Long id) {
+        if (!reservationRepository.existsById(id)) {
+            throw new RuntimeException("Reservation not found");
+        }
         reservationRepository.deleteById(id);
     }
 }
