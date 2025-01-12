@@ -24,30 +24,28 @@ public class LocationController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Location> getLocationById(@PathVariable Long id) {
+    public ResponseEntity<?> getLocationById(@PathVariable Long id) {
         return locationService.getLocationById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Location createLocation(@Valid @RequestBody Location location) {
-        return locationService.createLocation(location);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Location> updateLocation(@PathVariable Long id, @Valid @RequestBody Location locationDetails) {
+    public ResponseEntity<?> createLocation(@Valid @RequestBody Location location) {
         try {
-            Location updatedLocation = locationService.updateLocation(id, locationDetails);
-            return ResponseEntity.ok(updatedLocation);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.ok(locationService.createLocation(location));
+        } catch (RuntimeException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteLocation(@PathVariable Long id) {
-        locationService.deleteLocation(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> deleteLocation(@PathVariable Long id) {
+        try {
+            locationService.deleteLocation(id);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
 }

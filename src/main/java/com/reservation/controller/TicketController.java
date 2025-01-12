@@ -29,24 +29,32 @@ public class TicketController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Ticket> getTicketById(@PathVariable Long id) {
+    public ResponseEntity<?> getTicketById(@PathVariable Long id) {
         return ticketService.getTicketById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Ticket createTicket(@Valid @RequestBody TicketRequest request) {
-        Reservation reservation = reservationService.getReservationById(request.getReservationId())
-                .orElseThrow(() -> new RuntimeException("Reservation not found"));
+    public ResponseEntity<?> createTicket(@Valid @RequestBody TicketRequest request) {
+        try {
+            Reservation reservation = reservationService.getReservationById(request.getReservationId())
+                    .orElseThrow(() -> new RuntimeException("Reservation not found"));
 
-        Ticket ticket = new Ticket(reservation, request.getTicketCode());
-        return ticketService.createTicket(ticket);
+            Ticket ticket = new Ticket(reservation, request.getTicketCode());
+            return ResponseEntity.ok(ticketService.createTicket(ticket));
+        } catch (RuntimeException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTicket(@PathVariable Long id) {
-        ticketService.deleteTicket(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> deleteTicket(@PathVariable Long id) {
+        try {
+            ticketService.deleteTicket(id);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
 }
