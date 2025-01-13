@@ -1,8 +1,10 @@
 package com.reservation.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
+@Schema(name = "ReservationRequest", description = "Data for creating a reservation")
 public class ReservationRequest {
 
     public ReservationRequest(Long userId, Long eventId, Integer numberOfSeats) {
@@ -12,12 +14,15 @@ public class ReservationRequest {
     }
 
     @NotNull(message = "User ID is required")
+    @Schema(description = "User ID who made the reservation", example = "1")
     private Long userId;
 
     @NotNull(message = "Event ID is required")
+    @Schema(description = "Event ID that was reserved", example = "1")
     private Long eventId;
 
     @Min(value = 1, message = "At least one seat must be reserved")
+    @Schema(description = "Number of seats reserved", example = "2")
     private Integer numberOfSeats;
 
     public Long getUserId() { return userId; }

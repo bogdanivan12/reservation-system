@@ -1,11 +1,13 @@
 package com.reservation.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.time.LocalDate;
 
+@Schema(name = "EventRequest", description = "Data for creating or updating an event")
 public class EventRequest {
 
     public EventRequest(String name, LocalDate date, Long locationId, Integer capacity) {
@@ -28,6 +30,9 @@ public class EventRequest {
     @Positive(message = "Capacity must be positive")
     private Integer capacity;
 
+    @Schema(description = "Category ID", example = "1")
+    private Long categoryId;
+
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
@@ -39,4 +44,8 @@ public class EventRequest {
 
     public Integer getCapacity() { return capacity; }
     public void setCapacity(Integer capacity) { this.capacity = capacity; }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
 }

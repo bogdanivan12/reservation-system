@@ -60,4 +60,8 @@ public class EventService {
         }
         eventRepository.deleteById(id);
     }
+
+    public List<Event> getEventsByCategory(Long categoryId) {
+        return eventRepository.findByCategoryId(categoryId);
+    }
 }
