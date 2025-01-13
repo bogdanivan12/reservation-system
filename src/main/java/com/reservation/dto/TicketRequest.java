@@ -1,8 +1,10 @@
 package com.reservation.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+@Schema(name = "TicketRequest", description = "Data for reserving a ticket")
 public class TicketRequest {
 
     public TicketRequest(Long reservationId, String ticketCode) {
@@ -11,9 +13,11 @@ public class TicketRequest {
     }
 
     @NotNull(message = "Reservation ID is required")
+    @Schema(description = "Reservation ID that the ticket is associated with", example = "1")
     private Long reservationId;
 
     @NotBlank(message = "Ticket code is required")
+    @Schema(description = "Unique code of the ticket", example = "TICKET-123")
     private String ticketCode;
 
     public Long getReservationId() {

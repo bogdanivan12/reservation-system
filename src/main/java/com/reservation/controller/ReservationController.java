@@ -7,6 +7,8 @@ import com.reservation.model.Event;
 import com.reservation.service.ReservationService;
 import com.reservation.service.UserService;
 import com.reservation.service.EventService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/reservations")
+@Tag(name = "Reservation Controller", description = "Manage reservations")
 public class ReservationController {
 
     private final ReservationService reservationService;
@@ -27,11 +30,13 @@ public class ReservationController {
         this.eventService = eventService;
     }
 
+    @Operation(summary = "Get all reservations", description = "Returns a list of all reservations")
     @GetMapping
     public List<Reservation> getAllReservations() {
         return reservationService.getAllReservations();
     }
 
+    @Operation(summary = "Get reservation by id", description = "Retrieve a reservation by its unique identifier")
     @GetMapping("/{id}")
     public ResponseEntity<?> getReservationById(@PathVariable Long id) {
         return reservationService.getReservationById(id)
@@ -39,6 +44,7 @@ public class ReservationController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @Operation(summary = "Create a new reservation", description = "Creates a new reservation based on the provided details.")
     @PostMapping
     public ResponseEntity<?> createReservation(@Valid @RequestBody ReservationRequest request) {
         try {
@@ -56,6 +62,7 @@ public class ReservationController {
         }
     }
 
+    @Operation(summary = "Delete a reservation", description = "Deletes a reservation by its unique identifier.")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteReservation(@PathVariable Long id) {
         try {
